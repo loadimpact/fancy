@@ -1,0 +1,21 @@
+name: Build & publish binary
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    name: Build & publish binary
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: go build .
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: fancy
+        tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true
