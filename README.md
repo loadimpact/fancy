@@ -49,7 +49,7 @@ Usage of fancy:
         type="omprog"
         name="loki"
         template="LokiFormat"
-        binary="/opt/fancy --environment dev --service example_service --loki-url https://your_endpoint/api/prom/push"
+        binary="/opt/fancy --loki-labels environment=dev,service=fancy_example --loki-url https://your_endpoint/api/prom/push"
         )
 ```
 5. Make sure you have set the right Loki URL.
