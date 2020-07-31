@@ -28,6 +28,7 @@ func main() {
 		lokiChanSize    = fs.Int("loki-chan-size", 10000, "Loki buffered channel capacity")
 		lokiBatchSize   = fs.Int("loki-batch-size", 1024*1024, "Loki will batch these bytes before sending them")
 		lokiBatchWait   = fs.Int("loki-batch-wait", 4, "Loki will send logs after these seconds")
+		lokiLabels      = fs.String("loki-labels", "", "Prometheus scrape endpoint address")
 		promOnly        = fs.Bool("prom-only", false, "Only metrics for Prometheus will be exposed")
 		promAddr        = fs.String("prom-addr", ":9090", "Prometheus scrape endpoint address")
 		staticTag       = fs.String("static-tag", "", "Will be used as a static label value with the name static_tag")
@@ -46,6 +47,7 @@ func main() {
 		staticTag:       *staticTag,
 		staticTagFilter: []byte(*staticTagFilter),
 		scanChan:        make(chan [scanSize][]byte, 1000),
+		lokiLabels:      *lokiLabels,
 		Environment:     *environment,
 		Service:         *service,
 	}
@@ -94,6 +96,7 @@ type Input struct {
 	cmd             []string
 	cache           Cache
 	useLoki         bool
+	lokiLabels      string
 	scanChan        chan [scanSize][]byte
 	lineChan        chan *LogLine
 	promOnly        bool
@@ -154,6 +157,7 @@ func (in *Input) process() {
 				}
 			}
 
+			ll.LokiLabels = in.lokiLabels
 			ll.Environment = in.Environment
 			ll.Service = in.Service
 			ll.StaticTag = staticTag

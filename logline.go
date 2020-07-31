@@ -11,6 +11,7 @@ type LogLine struct {
 	Severity    string
 	Hostname    string
 	Program     string
+	LokiLabels  string
 	Environment string
 	Service     string
 	MsgPos      int

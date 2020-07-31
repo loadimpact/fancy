@@ -102,6 +102,14 @@ func (l *Loki) Run() {
 
 			l.entry.labels["environment"] = model.LabelValue(ll.Environment)
 			l.entry.labels["service"] = model.LabelValue(ll.Service)
+			l.entry.labels["something"] = model.LabelValue(ll.LokiLabels)
+
+			if len(ll.LokiLabels) > 0 && ll.LokiLabels != " " {
+				for _, element := range strings.Split(ll.LokiLabels, ",") {
+					s := strings.Split(element, "=")
+					l.entry.labels["something"] = model.LabelValue(s[1])
+				}
+			}
 
 			if len(ll.StaticTag) > 0 && ll.StaticTag != " " {
 				l.entry.labels["static_tag"] = model.LabelValue(ll.StaticTag)
