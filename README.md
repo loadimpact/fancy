@@ -6,7 +6,7 @@
 ## Usage
 
 ```
-➜  fancy git:(master) ✗ ./fancy -h
+➜  fancy git:(develop) ✗ ./fancy -h                                                                                                  
 Usage of fancy:
   -cmd string
         Send input msg to external command and use it's output as new msg
@@ -16,16 +16,14 @@ Usage of fancy:
         Loki will send logs after these seconds (default 4)
   -loki-chan-size int
         Loki buffered channel capacity (default 10000)
+  -loki-labels string
+        Additional label value pair separated by , to send with logs. e.g env=dev,foo=bar
   -loki-url string
         Loki Server URL (default "http://localhost:3100")
   -prom-addr string
         Prometheus scrape endpoint address (default ":9090")
   -prom-only
         Only metrics for Prometheus will be exposed
-  -environment string
-        Set an environment tag
-  -service string
-        Set a service tag
   -static-tag string
         Will be used as a static label value with the name static_tag
   -static-tag-filter string

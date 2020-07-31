@@ -28,13 +28,11 @@ func main() {
 		lokiChanSize    = fs.Int("loki-chan-size", 10000, "Loki buffered channel capacity")
 		lokiBatchSize   = fs.Int("loki-batch-size", 1024*1024, "Loki will batch these bytes before sending them")
 		lokiBatchWait   = fs.Int("loki-batch-wait", 4, "Loki will send logs after these seconds")
-		lokiLabels      = fs.String("loki-labels", "", "Prometheus scrape endpoint address")
+		lokiLabels      = fs.String("loki-labels", "", "Additional label value pair separated by , to send with logs. e.g env=dev,foo=bar")
 		promOnly        = fs.Bool("prom-only", false, "Only metrics for Prometheus will be exposed")
 		promAddr        = fs.String("prom-addr", ":9090", "Prometheus scrape endpoint address")
 		staticTag       = fs.String("static-tag", "", "Will be used as a static label value with the name static_tag")
 		staticTagFilter = fs.String("static-tag-filter", "", "Set static-tag only when msg contains this string")
-		environment     = fs.String("environment", "", "Set an environment tag")
-		service         = fs.String("service", "", "Set a service tag")
 	)
 	fs.Parse(os.Args[1:])
 
@@ -48,8 +46,6 @@ func main() {
 		staticTagFilter: []byte(*staticTagFilter),
 		scanChan:        make(chan [scanSize][]byte, 1000),
 		lokiLabels:      *lokiLabels,
-		Environment:     *environment,
-		Service:         *service,
 	}
 
 	if *promOnly {
@@ -102,8 +98,6 @@ type Input struct {
 	promOnly        bool
 	staticTag       string
 	staticTagFilter []byte
-	Environment     string
-	Service         string
 }
 
 type Cache struct {
@@ -158,8 +152,6 @@ func (in *Input) process() {
 			}
 
 			ll.LokiLabels = in.lokiLabels
-			ll.Environment = in.Environment
-			ll.Service = in.Service
 			ll.StaticTag = staticTag
 
 			if in.promOnly {

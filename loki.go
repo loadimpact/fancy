@@ -100,9 +100,6 @@ func (l *Loki) Run() {
 
 			l.entry = entry{model.LabelSet{}, &logproto.Entry{Timestamp: ts}}
 
-			l.entry.labels["environment"] = model.LabelValue(ll.Environment)
-			l.entry.labels["service"] = model.LabelValue(ll.Service)
-
 			if len(ll.LokiLabels) > 0 && ll.LokiLabels != " " {
 				for _, element := range strings.Split(ll.LokiLabels, ",") {
 					s := strings.Split(element, "=")
